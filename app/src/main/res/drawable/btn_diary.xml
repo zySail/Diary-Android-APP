@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--失效-->
+    <item android:state_enabled="false">
+        <shape android:shape="rectangle">
+            <corners android:radius="6dp" />
+            <solid android:color="@color/transparent" />
+            <stroke android:width="2dp" android:color="@color/pink_200" />
+        </shape>
+    </item>
+
+    <!--按压-->
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <corners android:radius="6dp" />
+            <solid android:color="@color/transparent" />
+            <stroke android:width="2dp" android:color="@color/pink_500" />
+        </shape>
+    </item>
+
+    <!--正常-->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="6dp" />
+            <solid android:color="@color/transparent" />
+            <stroke android:width="2dp" android:color="@color/pink_300" />
+        </shape>
+    </item>
+
+</selector>
