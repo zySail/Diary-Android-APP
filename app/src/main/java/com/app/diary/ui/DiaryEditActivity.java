@@ -41,6 +41,7 @@ public class DiaryEditActivity extends BaseActivity {
     private TextView weatherTextView;//天气文本控件
     private EditText titleEditText;//标题输入框控件
     private EditText contentEditText;//内容输入框控件
+    private TextView emojiTextView; //表情包
 
     private DatePickerDialog datePickerDialog;//日期选择对话框
     private AlertDialog weatherPickerDialog;//天气选择对话框
@@ -110,6 +111,7 @@ public class DiaryEditActivity extends BaseActivity {
         weatherTextView = findViewById(R.id.weather_textView);
         titleEditText = findViewById(R.id.title_editText);
         contentEditText = findViewById(R.id.content_editText);
+        emojiTextView = findViewById(R.id.emoji_textView);
     }
 
     /**
@@ -138,6 +140,14 @@ public class DiaryEditActivity extends BaseActivity {
                 showWeatherPickerDialog();
             }
 
+        });
+        //设置表情包文本的点击事件
+        emojiTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 弹出选择表情包的对话框
+                showEmojiPickerDialog();
+            }
         });
 
         if (diaryId > 0) {//修改日记
@@ -221,6 +231,13 @@ public class DiaryEditActivity extends BaseActivity {
         if (!weatherPickerDialog.isShowing()) {
             weatherPickerDialog.show();
         }
+    }
+
+    /**
+     * 显示表情包对话框
+     */
+    private void showEmojiPickerDialog(){
+        
     }
 
     /**
