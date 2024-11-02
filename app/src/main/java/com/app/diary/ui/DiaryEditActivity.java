@@ -35,6 +35,10 @@ import android.view.ViewGroup;
 import android.content.Context;
 import android.widget.AdapterView;
 
+import com.app.diary.adapter.EmojiAdapter;
+import android.view.LayoutInflater;
+
+
 
 /**
  * 编辑日志
@@ -251,8 +255,27 @@ public class DiaryEditActivity extends BaseActivity {
      */
     private void showEmojiPickerDialog(){
         if(emojiPickerDialog == null){
+            // 表情资源数组
+            int[] emojiResIds = {
+                    R.drawable.p1, // 替换为您的表情资源 ID
+                    R.drawable.p2,
+                    R.drawable.p3,
+                    R.drawable.p4,
+                    R.drawable.p5,
+            };
+
+            // 使用自定义布局创建对话框
+            View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_emoji_picker, null);
+            GridView gridView = dialogView.findViewById(R.id.grid_view);
+
+            // 创建并设置适配器
+            EmojiAdapter emojiAdapter = new EmojiAdapter(this, emojiResIds);
+            gridView.setAdapter(emojiAdapter);
+
+
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("选择表情包") // 设置对话框标题
+                    .setView(dialogView)
                     .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
