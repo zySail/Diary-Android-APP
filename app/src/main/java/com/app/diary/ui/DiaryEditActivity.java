@@ -45,6 +45,7 @@ public class DiaryEditActivity extends BaseActivity {
 
     private DatePickerDialog datePickerDialog;//日期选择对话框
     private AlertDialog weatherPickerDialog;//天气选择对话框
+    private AlertDialog emojiPickerDialog; // 表情包选择对话框
 
     private long diaryId;//日记主键
 
@@ -92,6 +93,9 @@ public class DiaryEditActivity extends BaseActivity {
         }
         if (weatherPickerDialog != null && weatherPickerDialog.isShowing()) {
             weatherPickerDialog.dismiss();
+        }
+        if(emojiPickerDialog != null && emojiPickerDialog.isShowing()){
+            emojiPickerDialog.dismiss();
         }
     }
 
@@ -237,7 +241,12 @@ public class DiaryEditActivity extends BaseActivity {
      * 显示表情包对话框
      */
     private void showEmojiPickerDialog(){
-        
+        if(emojiPickerDialog == null){
+
+        }
+        if(!emojiPickerDialog.isShowing()){
+            emojiPickerDialog.show();
+        }
     }
 
     /**
