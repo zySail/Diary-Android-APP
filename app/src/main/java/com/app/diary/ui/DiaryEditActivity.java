@@ -27,6 +27,15 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
+import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.BaseAdapter;
+import android.view.View;
+import android.view.ViewGroup;
+import android.content.Context;
+import android.widget.AdapterView;
+
+
 /**
  * 编辑日志
  */
@@ -242,7 +251,23 @@ public class DiaryEditActivity extends BaseActivity {
      */
     private void showEmojiPickerDialog(){
         if(emojiPickerDialog == null){
-
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("选择表情包") // 设置对话框标题
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // 确认按钮的点击事件
+                            dialog.dismiss(); // 关闭对话框
+                        }
+                    })
+                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // 取消按钮的点击事件
+                            dialog.dismiss(); // 关闭对话框
+                        }
+                    });
+            emojiPickerDialog = builder.create(); // 创建对话框实例
         }
         if(!emojiPickerDialog.isShowing()){
             emojiPickerDialog.show();
