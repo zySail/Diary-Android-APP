@@ -12,10 +12,12 @@ import com.app.diary.R;
 public class EmojiAdapter extends BaseAdapter {
     private Context context;
     private int[] emojiResIds; // 存储表情资源 ID
+    private OnEmojiClickListener emojiClickListener; // 点击事件监听器
 
-    public EmojiAdapter(Context context, int[] emojiResIds) {
+    public EmojiAdapter(Context context, int[] emojiResIds, OnEmojiClickListener listener) {
         this.context = context;
         this.emojiResIds = emojiResIds;
+        this.emojiClickListener = listener; // 初始化点击事件监听器
     }
 
     @Override
@@ -46,7 +48,22 @@ public class EmojiAdapter extends BaseAdapter {
 
         // 设置表情图标
         emojiImageView.setImageResource(emojiResIds[position]);
+
+        // 设置点击事件
+        emojiImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (emojiClickListener != null) {
+                    emojiClickListener.onEmojiClick(emojiResIds[position]); // 调用点击事件
+                }
+            }
+        });
+
         return emojiImageView;
     }
-}
 
+    // 定义点击事件接口
+    public interface OnEmojiClickListener {
+        void onEmojiClick(int emojiResId);
+    }
+}

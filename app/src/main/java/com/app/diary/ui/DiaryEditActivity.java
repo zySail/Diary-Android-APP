@@ -37,7 +37,11 @@ import android.widget.AdapterView;
 
 import com.app.diary.adapter.EmojiAdapter;
 import android.view.LayoutInflater;
-
+import android.text.Editable;
+import android.text.style.ImageSpan;
+import android.text.Spannable;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 
 
 /**
@@ -253,8 +257,8 @@ public class DiaryEditActivity extends BaseActivity {
     /**
      * 显示表情包对话框
      */
-    private void showEmojiPickerDialog(){
-        if(emojiPickerDialog == null){
+    private void showEmojiPickerDialog() {
+        if (emojiPickerDialog == null) {
             // 表情资源数组
             int[] emojiResIds = {
                     R.drawable.p1, // 替换为您的表情资源 ID
@@ -268,10 +272,14 @@ public class DiaryEditActivity extends BaseActivity {
             View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_emoji_picker, null);
             GridView gridView = dialogView.findViewById(R.id.grid_view);
 
-            // 创建并设置适配器
-            EmojiAdapter emojiAdapter = new EmojiAdapter(this, emojiResIds);
+            // 创建并设置适配器，传递点击事件监听器
+            EmojiAdapter emojiAdapter = new EmojiAdapter(this, emojiResIds, new EmojiAdapter.OnEmojiClickListener() {
+                @Override
+                public void onEmojiClick(int emojiResId) {
+                    insertEmoji(emojiResId); // 调用插入表情的方法
+                }
+            });
             gridView.setAdapter(emojiAdapter);
-
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("选择表情包") // 设置对话框标题
@@ -292,10 +300,36 @@ public class DiaryEditActivity extends BaseActivity {
                     });
             emojiPickerDialog = builder.create(); // 创建对话框实例
         }
-        if(!emojiPickerDialog.isShowing()){
+        if (!emojiPickerDialog.isShowing()) {
             emojiPickerDialog.show();
         }
     }
+
+    private void insertEmoji(int emojiResId) {
+        Editable editable = contentEditText.getText();
+
+        // 创建 BitmapDrawable 并获取 Bitmap
+        BitmapDrawable bitmapDrawable = (BitmapDrawable) getResources().getDrawable(emojiResId);
+        Bitmap bitmap = bitmapDrawable.getBitmap();
+
+        // 设置期望的大小
+        int desiredWidth = 100; // 调整为你需要的宽度
+        int desiredHeight = 100; // 调整为你需要的高度
+
+        // 创建缩放后的 Bitmap
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, desiredWidth, desiredHeight, true);
+
+        // 使用缩放后的 Bitmap 创建 ImageSpan
+        ImageSpan imageSpan = new ImageSpan(this, scaledBitmap);
+
+        // 插入表情
+        editable.append(" "); // 添加空格作为占位符
+        int start = editable.length(); // 获取当前插入位置
+        editable.append(" "); // 再添加一个空格作为占位符
+        editable.setSpan(imageSpan, start, editable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE); // 插入表情
+    }
+
+
 
     /**
      * 根据年月日获取日期函数
