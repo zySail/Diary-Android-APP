@@ -28,12 +28,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.BaseAdapter;
-import android.view.View;
-import android.view.ViewGroup;
-import android.content.Context;
-import android.widget.AdapterView;
 
 import com.app.diary.adapter.EmojiAdapter;
 import android.view.LayoutInflater;
