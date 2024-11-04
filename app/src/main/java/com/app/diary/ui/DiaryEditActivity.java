@@ -166,12 +166,11 @@ public class DiaryEditActivity extends BaseActivity {
         emojiTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 弹出选择表情包的对话框
-                showEmojiPickerDialog();
+                showEmojiPickerDialog(); // 弹出选择表情包的对话框
             }
         });
 
-        if (diaryId > 0) {//修改日记
+        if (diaryId > 0) { //修改日记
             Diary diary = Mapp.getInstance().getDiaryDataSource().selectOne(diaryId);
 
             if (diary == null) {
@@ -259,45 +258,31 @@ public class DiaryEditActivity extends BaseActivity {
      */
     private void showEmojiPickerDialog() {
         if (emojiPickerDialog == null) {
-            // 表情资源数组
+            // 表情包资源数组，存储表情包资源 ID
             int[] emojiResIds = {
-                    R.drawable.p1, // 替换为您的表情资源 ID
+                    R.drawable.p1,
                     R.drawable.p2,
                     R.drawable.p3,
                     R.drawable.p4,
                     R.drawable.p5,
             };
 
-            // 使用自定义布局创建对话框
+            // 使用自定义gridView创建对话框(自定义布局:res/layout/dialog_emoji_picker.xml)
             View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_emoji_picker, null);
             GridView gridView = dialogView.findViewById(R.id.grid_view);
 
-            // 创建并设置适配器，传递点击事件监听器
-            EmojiAdapter emojiAdapter = new EmojiAdapter(this, emojiResIds, new EmojiAdapter.OnEmojiClickListener() {
-                @Override
-                public void onEmojiClick(int emojiResId) {
-                    insertEmoji(emojiResId); // 调用插入表情的方法
-                }
+            // 创建并设置填充器，传递接口实现
+            EmojiAdapter emojiAdapter = new EmojiAdapter(this, emojiResIds, emojiResId -> {
+                insertEmoji(emojiResId); // 插入表情方法
+                emojiPickerDialog.dismiss(); // 关闭对话框方法
             });
             gridView.setAdapter(emojiAdapter);
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("选择表情包") // 设置对话框标题
+            builder.setTitle("选择表情包")
                     .setView(dialogView)
-                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // 确认按钮的点击事件
-                            dialog.dismiss(); // 关闭对话框
-                        }
-                    })
-                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // 取消按钮的点击事件
-                            dialog.dismiss(); // 关闭对话框
-                        }
-                    });
+                    .setNegativeButton("取消", (dialog, which) -> dialog.dismiss());
+
             emojiPickerDialog = builder.create(); // 创建对话框实例
         }
         if (!emojiPickerDialog.isShowing()) {
@@ -312,20 +297,17 @@ public class DiaryEditActivity extends BaseActivity {
         BitmapDrawable bitmapDrawable = (BitmapDrawable) getResources().getDrawable(emojiResId);
         Bitmap bitmap = bitmapDrawable.getBitmap();
 
-        // 设置期望的大小
-        int desiredWidth = 100; // 调整为你需要的宽度
-        int desiredHeight = 100; // 调整为你需要的高度
+        // 设置大小
+        int desiredWidth = 100;
+        int desiredHeight = 100;
 
-        // 创建缩放后的 Bitmap
+        // 创建缩放后的 Bitmap，并使用其创建 ImageSpan
         Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, desiredWidth, desiredHeight, true);
-
-        // 使用缩放后的 Bitmap 创建 ImageSpan
         ImageSpan imageSpan = new ImageSpan(this, scaledBitmap);
 
-        // 插入表情
-        editable.append(" "); // 添加空格作为占位符
-        int start = editable.length(); // 获取当前插入位置
-        editable.append(" "); // 再添加一个空格作为占位符
+        editable.append(" "); // 空格占位符
+        int start = editable.length(); // 获取插入位置
+        editable.append(" "); // 空格占位符
         editable.setSpan(imageSpan, start, editable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE); // 插入表情
     }
 
